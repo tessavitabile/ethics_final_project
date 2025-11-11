@@ -29,4 +29,5 @@ def get_air_quality_by_neighborhood(air_quality_df, geo_lookup_df):
     air_quality_merged_df = pd.merge(air_quality_df, geo_lookup_df,
                                         left_on='geo_place_name', right_on='Name',
                                         how='inner')
+    air_quality_merged_df['data_value_float'] = air_quality_merged_df['data_value'].astype(float)
     return air_quality_merged_df.loc[air_quality_merged_df['Borough']==borough].groupby(['geo_place_name', 'name', 'measure_info'])['data_value_float'].mean()
