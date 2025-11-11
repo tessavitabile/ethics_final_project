@@ -15,3 +15,10 @@ def get_parks(parks_df):
     zip = input("Enter a NYC zipcode: ")
     print("\nAddresses of parks in this zip code")
     return parks_df.loc[parks_df['zipcode'] == zip, ['signname', 'address', 'borough', 'zipcode']]
+
+def get_air_quality_by_borough(air_quality_df, geo_lookup_df):
+    air_quality_merged_df = pd.merge(air_quality_df, geo_lookup_df,
+                                        left_on='geo_place_name', right_on='Name',
+                                        how='inner')
+    air_quality_merged_df['data_value_float'] = air_quality_merged_df['data_value'].astype(float)
+    return air_quality_merged_df.groupby(['Borough', 'name', 'measure_info'])['data_value_float'].mean()
