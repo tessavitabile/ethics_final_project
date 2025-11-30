@@ -46,3 +46,7 @@ def get_asthma_by_borough(asthma_df):
 def get_asthma_by_neighborhood(asthma_df):
     neighborhood_df = asthma_df.groupby(["Geography", "Borough"])["Estimated annual rate per 10,000"].mean().reset_index()
     return neighborhood_df
+
+def get_rent_by_neighborhood(rent_df):
+    neighborhood_df = rent_df.groupby(["Geography", "Borough"])["Value"].mean().reset_index()
+    return neighborhood_df
