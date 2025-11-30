@@ -33,6 +33,7 @@ def get_air_quality_by_neighborhood(air_quality_df, geo_lookup_df):
     return air_quality_merged_df.loc[air_quality_merged_df['Borough']==borough].groupby(['geo_place_name', 'name', 'measure_info'])['data_value_float'].mean()
 import pandas as pd
 
+
 def get_asthma_data(file_path="data/asthma_ed_df.csv"):
     df = pd.read_csv(file_path)
     df["Estimated annual rate per 10,000"] = pd.to_numeric(df["Estimated annual rate per 10,000"], errors='coerce')
@@ -45,6 +46,14 @@ def get_asthma_by_borough(asthma_df):
 
 def get_asthma_by_neighborhood(asthma_df):
     neighborhood_df = asthma_df.groupby(["Geography", "Borough"])["Estimated annual rate per 10,000"].mean().reset_index()
+    return neighborhood_df
+    
+def get_rent_data(file_path="data/rent_df.csv"):
+    df = pd.read_csv(file_path)
+    return df
+
+def get_rent_by_borough(rent_df):
+    neighborhood_df = rent_df.groupby(["Geography", "Borough"])["Value"].mean().reset_index()
     return neighborhood_df
 
 def get_rent_by_neighborhood(rent_df):
