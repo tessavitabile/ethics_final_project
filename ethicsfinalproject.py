@@ -69,3 +69,32 @@ def get_air_quality_table():
     }
     air_quality_table = pd.DataFrame(data)
     return air_quality_table
+
+def get_heat_map(zip_codes_gdf, parks_by_zip):
+    #Merge park counts and zipcodes Geodata
+    zip_parks_gdf = zip_codes_gdf.merge(
+        parks_by_zip,
+        left_on='modzcta',
+        right_on='zipcode',
+        how='left'
+    )
+
+    #Set zip codes with no parks to 0
+    zip_parks_gdf['Number of Parks'] = zip_parks_gdf['Number of Parks'].fillna(0)
+
+    #Heat Map
+    fig = px.choropleth_mapbox(
+        zip_parks_gdf,
+        geojson=json.loads(zip_parks_gdf.to_json()),
+        locations="modzcta",
+        featureidkey="properties.modzcta",
+        color="Number of Parks",
+        color_continuous_scale="YlGn",
+        hover_name="modzcta",
+        hover_data={"Number of Parks": True},
+        mapbox_style="carto-positron",
+        zoom=8.8,
+        center={"lat": 40.7, "lon": -74},
+        opacity=0.5,
+    )
+    return fig
