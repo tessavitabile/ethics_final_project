@@ -111,3 +111,21 @@ def get_heat_map(zip_codes_df, parks_by_zip):
         opacity=0.5,
     )
     return fig
+
+def get_borough_summary(rent_df, asthma_df, parks_df):
+    rent_borough = rent_df.groupby("Borough")['Value'].mean().reset_index()
+    rent_borough.rename(columns={'Borough':'borough'}, inplace=True)
+    rent_borough.rename(columns={'Value': 'Average Percentage of Households Spending >30% on Rent'}, inplace=True)
+
+    asthma_borough = asthma_df.groupby("Borough")['Estimated annual rate per 10,000'].mean().reset_index()
+    asthma_borough.rename(columns={'Borough':'borough'}, inplace=True)
+    asthma_borough.rename(columns={'Estimated annual rate per 10,000': 'Estimated annual rate of Asthma ED Visits per 10,000'}, inplace=True)
+
+    borough_map = {'M': 'Manhattan','B': 'Brooklyn','Q': 'Queens','X': 'Bronx','R': 'Staten Island'}
+    parks_df['borough'] = parks_df['borough'].map(borough_map)
+    parks_borough = parks_df.groupby('borough').size().reset_index(name='Number of Parks')
+
+    borough_summary = pd.merge(rent_borough, asthma_borough, on="borough")
+    borough_summary = pd.merge(borough_summary, parks_borough, on="borough")
+    borough_summary.style.background_gradient(cmap='Blues', subset=['Average Percentage of Households Spending >30% on Rent', 'Estimated annual rate of Asthma ED Visits per 10,000', 'Number of Parks'])
+    return borough_summary
