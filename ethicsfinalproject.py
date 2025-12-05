@@ -127,5 +127,4 @@ def get_borough_summary(rent_df, asthma_df, parks_df):
 
     borough_summary = pd.merge(rent_borough, asthma_borough, on="borough")
     borough_summary = pd.merge(borough_summary, parks_borough, on="borough")
-    borough_summary.style.background_gradient(cmap='Blues', subset=['Average Percentage of Households Spending >30% on Rent', 'Estimated annual rate of Asthma ED Visits per 10,000', 'Number of Parks'])
     return borough_summary
