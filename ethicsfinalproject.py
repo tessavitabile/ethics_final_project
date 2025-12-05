@@ -3,6 +3,8 @@ from    sodapy import Socrata
 import json
 import matplotlib.pyplot as plt
 import plotly.express as px
+import geopandas as gpd
+from shapely.geometry import shape
 
 def get_data_frame(id):
     client     = Socrata("data.cityofnewyork.us", None)
@@ -73,7 +75,15 @@ def get_air_quality_table():
     air_quality_table = pd.DataFrame(data)
     return air_quality_table
 
-def get_heat_map(zip_codes_gdf, parks_by_zip):
+def get_heat_map(zip_codes_df, parks_by_zip):
+    zip_codes_df = zip_codes_df.dropna(subset=['the_geom'])
+
+    #Convert 'the_geom' (dict with 'coordinates' and 'type') to shapely shapes
+    zip_codes_df['geometry'] = zip_codes_df['the_geom'].apply(shape)
+
+    #Create GeoDataFrame
+    zip_codes_gdf = gpd.GeoDataFrame(zip_codes_df, geometry='geometry', crs="EPSG:4326")
+
     #Merge park counts and zipcodes Geodata
     zip_parks_gdf = zip_codes_gdf.merge(
         parks_by_zip,
