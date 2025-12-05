@@ -59,3 +59,13 @@ def get_rent_by_borough(rent_df):
 def get_rent_by_neighborhood(rent_df):
     neighborhood_df = rent_df.groupby(["Geography", "Borough"])["Value"].mean().reset_index()
     return neighborhood_df
+
+def get_air_quality_table():
+    data = {
+        "Borough": ["Bronx", "Brooklyn", "Manhattan", "Queens", "Staten Island", "Healthy Standard"],
+        "PM2.5 (µg/m³)": [7.6, 7.3, 7.8, 7.2, 6.8, "< 12"],
+        "NO₂ (ppb)": [16.0, 17.4, 18.8, 15.2, 13.9, "< 53"],
+        "O₃ (ppb)": [32.7, 36.4, 30.4, 37.1, 34.3, "< 70"],
+    }
+    air_quality_table = pd.DataFrame(data)
+    return air_quality_table
