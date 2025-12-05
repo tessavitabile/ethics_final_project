@@ -1,5 +1,6 @@
 import  pandas as pd
 from    sodapy import Socrata
+import json
 import matplotlib.pyplot as plt
 import plotly.express as px
 
